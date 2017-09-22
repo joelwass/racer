@@ -16,7 +16,7 @@ fetch("http://127.0.0.1:8099").then(function(r){
   }
 })
 
-var default_parallel = 5;
+var default_parallel = 1000;
 var default_timeout = 3000;
 var requests = {}
 var patterns = ["http://*/*","https://*/*"]

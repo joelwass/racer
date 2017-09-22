@@ -8,10 +8,11 @@ const handler = (req, res) => {
     }).on('end', function() {
       body = Buffer.concat(body).toString();
       opts = (JSON.parse(body))
-      console.log('opts',opts)
+      //console.log('opts',opts)
       opts.gzip = true
       opts.followRedirect = false
       if(!opts.parallel) opts.parallel = 5 // default parallelization
+      console.time()
       for(var i=0;i<opts.parallel;i++){
         request(opts, function(err,resp,body){
           if(err){
