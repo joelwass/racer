@@ -1,5 +1,5 @@
-const request = require('request');
-const http = require('http')
+const fetch = require('node-fetch');
+const http = require('http');
 const handler = (req, res) => {
   if(req.url == "/racer"){
     var body = [];
@@ -13,19 +13,17 @@ const handler = (req, res) => {
       opts.followRedirect = false
       if(!opts.parallel) opts.parallel = 5 // default parallelization
       for(var i=0;i<opts.parallel;i++){
-        request(opts, function(err,resp,body){
-          if(err){
-            console.log(err);
-            return false;
-          }
-          try{
-            status = resp.statusCode + " [len " + body.length + "] " +body.substr(0,500)
-            if(resp.headers["Location"]) status+=resp.headers["Location"]
+        fetch(opts.url, opts).then((resp) => {
+          resp.text().then((body) => {
+            let status = resp.status + " [len " + body.length + "] " + body.substr(0, 500);
+            if (resp.headers["Location"]) status += resp.headers["Location"];
             console.log(status);
-          }catch(e){ console.log('Error', e) }
-        })    
+          });
+        }).catch(err => {
+          console.log(err);
+        });
       }
-    });    
+    });
   }
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.writeHead(200);
